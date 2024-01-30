@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joao.fernandes\\source\\repos\\ApiProduto\\ApiProduto.csproj": {}
+    "C:\\Users\\joao.fernandes\\Desktop\\JOAO MARQUES\\codigos\\ApiProduto\\ApiProduto.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joao.fernandes\\source\\repos\\ApiProduto\\ApiProduto.csproj": {
+    "C:\\Users\\joao.fernandes\\Desktop\\JOAO MARQUES\\codigos\\ApiProduto\\ApiProduto.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joao.fernandes\\source\\repos\\ApiProduto\\ApiProduto.csproj",
+        "projectUniqueName": "C:\\Users\\joao.fernandes\\Desktop\\JOAO MARQUES\\codigos\\ApiProduto\\ApiProduto.csproj",
         "projectName": "ApiProduto",
-        "projectPath": "C:\\Users\\joao.fernandes\\source\\repos\\ApiProduto\\ApiProduto.csproj",
+        "projectPath": "C:\\Users\\joao.fernandes\\Desktop\\JOAO MARQUES\\codigos\\ApiProduto\\ApiProduto.csproj",
         "packagesPath": "C:\\Users\\joao.fernandes\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joao.fernandes\\source\\repos\\ApiProduto\\obj\\",
+        "outputPath": "C:\\Users\\joao.fernandes\\Desktop\\JOAO MARQUES\\codigos\\ApiProduto\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -53,6 +53,20 @@
               "version": "[8.0.1, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[8.0.1, )"
             },

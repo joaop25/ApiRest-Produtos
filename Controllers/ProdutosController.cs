@@ -6,30 +6,35 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ApiProduto.Controllers
 {
+    //Meu resource
     [Route("api/produtos")]
     [ApiController]
     public class ProdutosController : ControllerBase
     {
         private readonly ApiDbContext _context;
-        //public ProdutosController(ApiDbContext context)
-        //{
-        //    _context = context;
-        //}
+        public ProdutosController(ApiDbContext context)
+        {
+            _context = context;
+        }
 
 
         [HttpGet]
         [ProducesResponseType(typeof(Produto), StatusCodes.Status200OK)]
-        public ActionResult GetProdutos()
+
+        //Vai retornar uma coleção IEnumerable de produto
+        public async Task<ActionResult<IEnumerable<Produto>>> GetProdutos()
         {
-            return Ok(new Produto { Id = 1, Nome = "Teste", QuantidadeEstoque = 10 });
+            return await _context.Produtos.ToListAsync();
         }
+
 
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(Produto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult Get(int id)
+        public async Task<ActionResult<Produto>> GetProduto(int id)
         {
-            return Ok(new Produto { Id = 1, Nome = "Teste" });
+            var produto = await _context.Produtos.FindAsync(id);
+            return produto;
         }
 
         [HttpPost]
@@ -37,25 +42,31 @@ namespace ApiProduto.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
         //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post(Produto produto)
+        public async Task<ActionResult<Produto>> PostProduto(Produto produto)
         {
             if (produto == null)
             {
                 return BadRequest();
             }
 
-            return CreatedAtAction("Get", new { id = produto.Id }, produto);
+            _context.Produtos.Add(produto);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetProduto), new { id = produto.Id }, produto);
         }
 
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Put(int id, Produto produto)
+        public async Task<ActionResult> PutProduto(int id, Produto produto)
         {
             if (id != produto.Id)
             {
                 return BadRequest();
             }
+            _context.Produtos.Update(produto);
+            await _context.SaveChangesAsync();
+
             return NoContent();
         }
 
@@ -63,8 +74,12 @@ namespace ApiProduto.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
 
-        public IActionResult Delete(int id)
+        public async Task<ActionResult> DeleteProduto(int id)
         {
+            var produto = await _context.Produtos.FindAsync(id);
+            _context.Produtos.Remove(produto);
+            await _context.SaveChangesAsync();  
+
             return NoContent();
         }
     }

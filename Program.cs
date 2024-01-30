@@ -1,4 +1,10 @@
+using ApiProduto.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder
+    .AddDbContextConfig();
+
 
 // Add services to the container.
 
