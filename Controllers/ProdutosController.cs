@@ -44,6 +44,7 @@ namespace ApiProduto.Controllers
         //[ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Produto>> PostProduto(Produto produto)
         {
+
             if (produto == null)
             {
                 return BadRequest();
