@@ -1,4 +1,5 @@
-﻿using ApiProduto.Data;
+﻿using ApiFuncional.Models;
+using ApiProduto.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;

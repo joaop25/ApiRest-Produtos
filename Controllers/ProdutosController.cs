@@ -1,11 +1,13 @@
 ﻿using ApiProduto.Data;
 using ApiProduto.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiProduto.Controllers
 {
+    [Authorize]
     //Meu resource
     [Route("api/produtos")]
     [ApiController]
@@ -28,6 +30,8 @@ namespace ApiProduto.Controllers
         }
 
 
+        //Vou permitir o acesso desse end-point sem a necessidade de autentificação
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(Produto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -40,14 +44,12 @@ namespace ApiProduto.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Produto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Produto>> PostProduto(Produto produto)
         {
 
-            if (produto == null)
+            if (_context.Produtos == null)
             {
-                return BadRequest();
+                return Problem("Erro ao criar um produto, contate o suporte!");
             }
 
             _context.Produtos.Add(produto);
@@ -65,23 +67,55 @@ namespace ApiProduto.Controllers
             {
                 return BadRequest();
             }
-            _context.Produtos.Update(produto);
-            await _context.SaveChangesAsync();
+            _context.Entry(produto).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch(DbUpdateConcurrencyException)
+            {
+                if (!ProdutoExiste(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            
 
             return NoContent();
         }
 
+        //[Authorize(Roles ="Admin")]
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
 
         public async Task<ActionResult> DeleteProduto(int id)
         {
+            if (_context.Produtos == null)
+            {
+                return NotFound();
+            }
+
             var produto = await _context.Produtos.FindAsync(id);
+
+            if (produto == null)
+            {
+                return NotFound();
+            }
             _context.Produtos.Remove(produto);
             await _context.SaveChangesAsync();  
 
             return NoContent();
+        }
+
+        private bool ProdutoExiste (int id)
+        {
+            return (_context.Produtos?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
